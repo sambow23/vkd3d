@@ -2923,7 +2923,7 @@ static uint32_t vkd3d_bindless_state_get_bindless_flags(struct d3d12_device *dev
             device_info->descriptor_indexing_features.descriptorBindingStorageTexelBufferUpdateAfterBind &&
             device_info->descriptor_indexing_features.shaderStorageImageArrayNonUniformIndexing &&
             device_info->descriptor_indexing_features.shaderStorageTexelBufferArrayNonUniformIndexing)
-        flags |= VKD3D_BINDLESS_UAV;
+        flags |= VKD3D_BINDLESS_UAV | VKD3D_BINDLESS_UAV_COUNTER;
 
 #if 0
     /* NVIDIA drivers currently (as of 2020-03-25) seem to have some rather interesting issues with bindless UBO where bindless SSBO
