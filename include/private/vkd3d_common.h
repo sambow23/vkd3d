@@ -202,6 +202,27 @@ static inline LONG InterlockedDecrement(LONG volatile *x)
 # error "atomic_add_fetch() not implemented for this platform"
 #endif  /* HAVE_SYNC_ADD_AND_FETCH */
 
+#define likely(x)       __builtin_expect((x),1)
+#define unlikely(x)     __builtin_expect((x),0)
+
+typedef uint32_t spinlock_t;
+
+static inline void spinlock_init(spinlock_t *lock)
+{
+    *lock = 0;
+}
+
+static inline void spinlock_acquire(spinlock_t *lock)
+{
+    while (unlikely(*lock) || unlikely(__atomic_exchange_n(lock, 1u, __ATOMIC_ACQUIRE)))
+        continue;
+}
+
+static inline void spinlock_release(spinlock_t *lock)
+{
+    __atomic_store_n(lock, 0u, __ATOMIC_RELEASE);
+}
+
 static inline void vkd3d_parse_version(const char *version, int *major, int *minor)
 {
     *major = atoi(version);
